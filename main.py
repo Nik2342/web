@@ -1,10 +1,11 @@
 # Импорт встроенной библиотеки для работы веб-сервера
 from http.server import BaseHTTPRequestHandler, HTTPServer
+from pathlib import Path
 # Для начала определим настройки запуска
 hostName = "localhost"  # Адрес для доступа по сети
 serverPort = 8080  # Порт для доступа по сети
-
-
+BASE_DIR = Path(__file__).resolve().parent
+TEMPLATES_DIR = BASE_DIR.joinpath('hw')
 class MyServer(BaseHTTPRequestHandler):
     """
     Специальный класс, который отвечает за
@@ -16,7 +17,8 @@ class MyServer(BaseHTTPRequestHandler):
         self.send_response(200)  # Отправка кода ответа
         self.send_header("Content-type", "text/html")  # Отправка типа данных, который будет передаваться
         self.end_headers()
-        with open("hw\\contact.html", encoding='utf-8') as f:
+        template_path = TEMPLATES_DIR.joinpath('contact.html')
+        with template_path.open(encoding='utf-8') as f:
             content = f.read()
         # Завершение формирования заголовков ответа
         self.wfile.write(bytes(content, "utf-8"))  # Тело ответа
